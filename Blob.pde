@@ -28,19 +28,19 @@ class Blob {
     this.alpha = 0;
     this.maxAlpha = 255;
     this.theta = random( 0.002, 0.004 );
-    this.theta = random(1) > 0.5 ? -this.theta : this.theta;
+    this.theta = random( 1 ) > 0.5 ? -this.theta : this.theta;
     this.pos = new Vec3D( random( -width, width ), random( -height, height ), 0 );
     this.start = this.pos.copy();
 
     float xVec = random( this.speed / 2, this.speed );
     float yVec = random( this.speed / 2, this.speed );
-    xVec = random(1) > 0.5 ? xVec : -xVec;
-    yVec = random(1) > 0.5 ? yVec : -yVec;
+    xVec = random( 1 ) > 0.5 ? xVec : -xVec;
+    yVec = random( 1 ) > 0.5 ? yVec : -yVec;
     this.vel = new Vec3D( xVec, yVec, 0 );
   }
 
   boolean isDead() {
-    return abs(this.pos.x) > width + ( this.radius * 2 ) || abs(this.pos.y) > height + ( this.radius * 2 );
+    return abs( this.pos.x ) > width + ( this.radius * 2 ) || abs(this.pos.y) > height + ( this.radius * 2 );
   }
 
   void setPosition() {
@@ -49,7 +49,7 @@ class Blob {
   }
 
   void setAlpha() {
-    if (this.alpha + this.delta < maxAlpha) {
+    if ( this.alpha + this.delta < maxAlpha ) {
       this.alpha += this.delta;
     } else {
       this.alpha = maxAlpha;
