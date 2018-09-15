@@ -31,7 +31,7 @@ void setupBlobs() {
   blobCount = 40;
   blobMaxSize = 2300;
   blobs = new ArrayList<Blob>();
-  img = loadImage( "reflection.png" );
+  img = loadImage( "gradient.png" );
   logo = loadImage( "logo.png" );
   colours = new int[] {
     0xff588ffc,
