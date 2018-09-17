@@ -5,14 +5,27 @@ ArrayList<Blob> blobs;
 PImage img;
 PImage logo;
 
-int[] colours;
-int blobCount;
-int blobMaxSize;
 float logoRatio = 3.195020746887967;
 float logoWidth = .4;
 
+int blobCount = 40;
+int blobMinSize = 1440;
+int blobMaxSize = 2250;
+
+int[] colours = new int[] {
+  0xff588ffc,
+  0xff382054,
+  0xffa04cff,
+  0xff522651,
+  0xffd545e6,
+  0xff7458fc,
+  0xffbb45e6,
+  0xffcda1ff,
+  0xffd9d9d9
+};
+
 void settings() {
-  fullScreen(P3D);
+  fullScreen( P3D );
 }
 
 void setup() {
@@ -28,38 +41,25 @@ void draw() {
 
 void setupBlobs() {
   pgl = ((PGraphicsOpenGL) g).pgl;
-  blobCount = 40;
-  blobMaxSize = 2300;
   blobs = new ArrayList<Blob>();
   img = loadImage( "gradient.png" );
   logo = loadImage( "logo.png" );
-  colours = new int[] {
-    0xff588ffc,
-    0xff382054,
-    0xffa04cff,
-    0xff522651,
-    0xffd545e6,
-    0xff7458fc,
-    0xffbb45e6,
-    0xffcda1ff,
-    0xffd9d9d9
-  };
 
   for ( int x = 0 ; x < blobCount ; x++ ) {
-    addBlob( x );
+    addBlob();
   }
 }
 
-void addBlob( int index ) {
+void addBlob() {
   int type = int( random( colours.length ) );
 
   blobs.add(
     new Blob(
-      index,
       random( width ),
       random( height ),
-      random( blobMaxSize/2, blobMaxSize ),
-      colours[ type ], type
+      random( blobMinSize, blobMaxSize ),
+      colours[ type ],
+      type
     )
   );
 }
@@ -76,12 +76,13 @@ void removeDeadBlobs() {
   }
 
   for ( int x = size ; x < blobCount ; x++ ) {
-    addBlob( size+x );
+    addBlob();
   }
 }
 
 void drawBlobs() {
   removeDeadBlobs();
+
   pgl.enable( PGL.TEXTURE_2D );
   pgl.depthMask( false );
   pgl.enable( PGL.BLEND );

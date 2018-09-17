@@ -10,13 +10,11 @@ class Blob {
   int colour;
   int maxAlpha;
   int type;
-  int index;
   Vec3D pos;
   Vec3D start;
   Vec3D vel;
 
-  Blob( int index, float x, float y, float radius, int colour, int type ) {
-    this.index = index;
+  Blob( float x, float y, float radius, int colour, int type ) {
     this.x = x;
     this.y = y;
     this.radius = radius;
@@ -61,7 +59,7 @@ class Blob {
     translate( this.pos.x, this.pos.y, this.pos.z );
     tint( red( this.colour ), green( this.colour ), blue( this.colour ), this.alpha );
     imageMode( CENTER );
-    image( img, 0, 0, this.radius*2, this.radius*2 );
+    image( img, 0, 0, this.radius * 2, this.radius * 2 );
     noTint();
     popMatrix();
   }
