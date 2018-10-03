@@ -42,7 +42,7 @@ class TypeAtom {
         animation.add( Ani.to( this, this.duration, this.delay, "rotation", 0, Ani.EXPO_OUT ) );
         break;
       case FadeIn:
-        animation.add( Ani.to( this, this.duration, this.delay, "alpha", 70, Ani.EXPO_OUT ) );
+        animation.add( Ani.to( this, this.duration, this.delay, "alpha", 50, Ani.EXPO_OUT ) );
         break;
       default:
         break;
@@ -63,7 +63,7 @@ class TypeAtom {
         break;
     }
   }
-  
+
   void setX( float x ) {
     this.x = x;
   }
