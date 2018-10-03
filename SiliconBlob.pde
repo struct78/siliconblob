@@ -13,8 +13,8 @@ PFont fontHeavy;
 float logoRatio = 3.195020746887967;
 float logoWidth = .4;
 
-int blobCount = 40;
-int blobMinSize = 2000;
+int blobCount = 25;
+int blobMinSize = 1500;
 int blobMaxSize = 4000;
 float pause = 0;
 float lineWidth = 0;
@@ -38,6 +38,7 @@ void setup() {
   pgl = ((PGraphicsOpenGL) g).pgl;
   setupBlobs();
   setupType();
+  noCursor();
 }
 
 void draw() {
