@@ -1,14 +1,19 @@
 import toxi.geom.*;
 import de.looksgood.ani.*;
+import ddf.minim.*;
+import ddf.minim.analysis.*;
 
 PGL pgl;
 ArrayList<Blob> blobs;
 ArrayList<TypeAtom> type;
 PImage img;
-PImage logo;
 AniSequence animation;
 PFont fontLight;
 PFont fontHeavy;
+
+Minim minim;
+BeatDetect beat;
+AudioInput in;
 
 float logoRatio = 3.195020746887967;
 float logoWidth = .4;
@@ -18,8 +23,10 @@ int blobMinSize = 1500;
 int blobMaxSize = 4000;
 float pause = 0;
 float lineWidth = 0;
-
+float beatLineWidth = 0;
+boolean isAudioReactive = true;
 float exitTime = 10.0;
+float ratioMultiplier = 0.0;
 
 int[] colours = new int[] {
   0xff588ffc,
@@ -35,6 +42,9 @@ void settings() {
 void setup() {
   Ani.init( this );
   animation = new AniSequence(this);
+  minim = new Minim(this);
+  in = minim.getLineIn();
+  beat = new BeatDetect(in.bufferSize(), in.sampleRate());
   pgl = ((PGraphicsOpenGL) g).pgl;
   setupBlobs();
   setupType();
@@ -59,11 +69,10 @@ void setupBlobs() {
 
 void setupType() {
   type = new ArrayList<TypeAtom>();
-  logo = loadImage( "SBP-logo-white.png" );
 
   float typeSize = (width * logoWidth) * .430313;
   int colour = 0xffffffff;
-  float delay = 0.05;
+  float delay = 0.0975;
   float x = (width * logoWidth);
   float y = (width * logoWidth) / logoRatio * .6;
   float duration = 2.0;
@@ -202,13 +211,26 @@ void drawBlobs() {
 void drawLogo() {
   float w = width * logoWidth;
   float h = w / logoRatio;
+  float minLineWidth = 9.075;
 
   translate( -w * .475, -h * .13 );
   for ( int x = 0 ; x < type.size() ; x++ ) {
     type.get(x).draw();
   }
 
-  float ratio = lineWidth == 0 ? 0 : lineWidth/100;
+  beat.setSensitivity(200);
+  beat.detect(in.mix);
+
+  float ratio = 1.0;
+
+  if (isAudioReactive && beat.isKick()) {
+    ratioMultiplier = 1.5;
+  } else {
+    ratioMultiplier *= 0.95;
+  }
+
+  ratio = lineWidth == 0 ? 0 : (lineWidth+ratioMultiplier)/100;
+
   float x = w * .4757 - ((w * ratio) / 2);
   float y = h * .5967;
 
