@@ -7,7 +7,10 @@ class Blob {
   float speed;
   float delta;
   float theta;
+  int lerpState;
+  int lerpMax;
   int colour;
+  int startColour;
   int maxAlpha;
   int type;
   Vec3D pos;
@@ -18,12 +21,15 @@ class Blob {
     this.x = x;
     this.y = y;
     this.radius = radius;
+    this.startColour = colour;
     this.colour = colour;
     this.type = type;
     this.div = 10;
     this.speed = 1.5;
     this.delta = 1.5;
     this.alpha = 0;
+    this.lerpState = 0;
+    this.lerpMax = 500;
     this.maxAlpha = 255;
     this.theta = random( 0.002, 0.004 );
     this.theta = random( 1 ) > 0.5 ? -this.theta : this.theta;
@@ -52,6 +58,15 @@ class Blob {
     } else {
       this.alpha = maxAlpha;
     }
+  }
+
+  void setLerpColour(int nextColour) {
+    this.lerpState++;
+    if (this.lerpState == this.lerpMax) {
+      this.type = this.type == colours.length-1 ? 0 : this.type+1;
+      this.lerpState = 0;
+    }
+    this.colour = lerpColor(this.startColour, nextColour, this.lerpState/this.lerpMax);
   }
 
   void draw( PImage img ) {
