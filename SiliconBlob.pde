@@ -13,20 +13,22 @@ PFont fontHeavy;
 
 Minim minim;
 BeatDetect beat;
+BeatListener beatListener;
 AudioInput in;
+
+boolean isAudioReactive = true;
 
 float logoRatio = 3.195020746887967;
 float logoWidth = .4;
+float pause = 0;
+float lineWidth = 0;
+float beatLineWidth = 0;
+float exitTime = 10.0;
+float ratioMultiplier = 0.0;
 
 int blobCount = 25;
 int blobMinSize = 1500;
 int blobMaxSize = 4000;
-float pause = 0;
-float lineWidth = 0;
-float beatLineWidth = 0;
-boolean isAudioReactive = true;
-float exitTime = 10.0;
-float ratioMultiplier = 0.0;
 
 int[] colours = new int[] {
   0xff588ffc,
@@ -37,7 +39,7 @@ int[] colours = new int[] {
 
 void settings() {
   fullScreen( P3D );
- }
+}
 
 void setup() {
   Ani.init( this );
@@ -45,7 +47,10 @@ void setup() {
   minim = new Minim(this);
   in = minim.getLineIn();
   beat = new BeatDetect(in.bufferSize(), in.sampleRate());
+  beat.setSensitivity(100);
+  beatListener = new BeatListener(beat, in);
   pgl = ((PGraphicsOpenGL) g).pgl;
+
   setupBlobs();
   setupType();
   noCursor();
@@ -54,6 +59,7 @@ void setup() {
 void draw() {
   translate( width / 2, height / 2 );
   background( 0 );
+
   drawBlobs();
   drawLogo();
 }
@@ -218,13 +224,12 @@ void drawLogo() {
     type.get(x).draw();
   }
 
-  beat.setSensitivity(200);
-  beat.detect(in.mix);
-
   float ratio = 1.0;
+  float level = (in.left.level() + in.right.level()) / 2;
+  float minLevel = 0.225;
 
-  if (isAudioReactive && beat.isKick()) {
-    ratioMultiplier = 1.5;
+  if (isAudioReactive && level > minLevel && beat.isKick()) {
+    ratioMultiplier = 5.0;
   } else {
     ratioMultiplier *= 0.95;
   }
@@ -239,4 +244,10 @@ void drawLogo() {
   rect(x, y, w * ratio, h * .03957);
 
   pgl.disable( PGL.TEXTURE_2D );
+}
+
+void stop() {
+  in.close();
+  minim.stop();
+  super.stop();
 }
