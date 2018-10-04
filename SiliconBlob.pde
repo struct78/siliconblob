@@ -16,8 +16,6 @@ BeatDetect beat;
 BeatListener beatListener;
 AudioInput in;
 
-boolean isAudioReactive = true;
-
 float logoRatio = 3.195020746887967;
 float logoWidth = .4;
 float pause = 0;
@@ -46,9 +44,9 @@ void setup() {
   animation = new AniSequence(this);
   minim = new Minim(this);
   in = minim.getLineIn();
-  beat = new BeatDetect(in.bufferSize(), in.sampleRate());
-  beat.setSensitivity(100);
-  beatListener = new BeatListener(beat, in);
+  beat = new BeatDetect( in.bufferSize(), in.sampleRate() );
+  beat.setSensitivity( 100 );
+  beatListener = new BeatListener( beat, in );
   pgl = ((PGraphicsOpenGL) g).pgl;
 
   setupBlobs();
@@ -76,11 +74,11 @@ void setupBlobs() {
 void setupType() {
   type = new ArrayList<TypeAtom>();
 
-  float typeSize = (width * logoWidth) * .430313;
+  float typeSize = ( width * logoWidth ) * .430313;
   int colour = 0xffffffff;
   float delay = 0.0975;
-  float x = (width * logoWidth);
-  float y = (width * logoWidth) / logoRatio * .6;
+  float x = ( width * logoWidth );
+  float y = ( width * logoWidth ) / logoRatio * .6;
   float duration = 2.0;
 
   // 09
@@ -225,23 +223,23 @@ void drawLogo() {
   }
 
   float ratio = 1.0;
-  float level = (in.left.level() + in.right.level()) / 2;
+  float level = ( in.left.level() + in.right.level() ) / 2;
   float minLevel = 0.225;
 
-  if (isAudioReactive && level > minLevel && beat.isKick()) {
+  if ( level > minLevel && beat.isKick() ) {
     ratioMultiplier = 5.0;
   } else {
     ratioMultiplier *= 0.95;
   }
 
-  ratio = lineWidth == 0 ? 0 : (lineWidth+ratioMultiplier)/100;
+  ratio = lineWidth == 0 ? 0 : ( lineWidth + ratioMultiplier ) / 100;
 
-  float x = w * .4757 - ((w * ratio) / 2);
+  float x = w * .4757 - ( ( w * ratio ) / 2 );
   float y = h * .5967;
 
   noStroke();
-  fill(0xffffffff);
-  rect(x, y, w * ratio, h * .03957);
+  fill( 0xffffffff );
+  rect( x, y, w * ratio, h * .03957 );
 
   pgl.disable( PGL.TEXTURE_2D );
 }
